@@ -14,10 +14,10 @@ Offline Web App for answering KTU textbook questions using OCR + RAG.
 - Data/ML: Chroma DB (vector store), LangChain (RAG pipeline), Tesseract OCR  
 
 ## 🤝 Contributors
-- [Mehal M Pradeep](https://github.com/yourusername)
+- [Mehal M Pradeep](https://github.com/Mehalmpradeep)
   🔹 Frontend Development and Feature Enhancement
   🔹 Backend Logic Updates for Frontend Compatibility
-- [Nandana Sankar J]()
+- [Nandana Sankar J](https://github.com/N001100Nj)
   🔹 Flask Backend Development
   🔹 RAG (Retrieval-Augmented Generation) Integration
 - [Gowri B S](https://github.com/friendusername)
