@@ -19,7 +19,8 @@ Offline Web App for answering KTU textbook questions using OCR + RAG.
   🔹 Backend Logic Updates for Frontend Compatibility
 - [Nandana Sankar J](https://github.com/N001100Nj)
   🔹 Flask Backend Development
-  🔹 RAG (Retrieval-Augmented Generation) Integration
+  🔹 RAG (Retrieval-Augmented Generation) Pipeline Implementation
+  🔹 Database and Embedding Pipeline Implementation 
 - [Gowri B S](https://github.com/friendusername)
   🔹 OCR Implementation  
   🔹 Data Pre-processing & Cleaning
