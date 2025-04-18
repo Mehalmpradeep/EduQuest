@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>EduQuest Admin Dashboard</title>
+  <link rel="icon" href="ques.png" type="image/png">
+  <!-- Remove this line: <link rel="stylesheet" href="styles.css"> -->
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #1c1c2b, #3a3a6e);
+      color: #f4f4f9;
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .dashboard-container {
+      background: #1e293b;
+      padding: 4rem;
+      border-radius: 20px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.7);
+      width: 90%;
+      max-width: 900px;
+      text-align: center;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(90deg, #00d4ff, #007bff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+    
+    h2 {
+      color: #00d4ff;
+    }
+    
+    button {
+      padding: 14px 32px;
+      font-size: 16px;
+      margin: 10px;
+      background: linear-gradient(90deg, #007bff, #00d4ff);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    button:hover {
+      background: linear-gradient(90deg, #00d4ff, #007bff);
+      transform: scale(1.05);
+    }
+    
+    .file-upload-wrapper {
+      background-color: #2d3e50;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    input[type="file"] {
+      display: none;
+    }
+    .custom-file-upload {
+      padding: 14px 28px;
+      background-color: #007bff;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .custom-file-upload:hover {
+      background: linear-gradient(90deg, #00d4ff, #007bff);
+    }
+    
+    #upload-status {
+      color: #ffd700;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    
+    li {
+      background-color: #2d3e50;
+      margin: 5px 0;
+      padding: 8px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>Admin Dashboard</h1>
+    <button onclick="showUploadForm()">Upload Textbook</button>
+    <button onclick="logout()">Logout</button>
+    
+    <div id="content"></div>
+  </div>
+  <script>
+    if (sessionStorage.getItem("isAdminLoggedIn") !== "true") {
+      window.location.href = "admin.html";
+    }
+    
+    function showUploadForm() {
+      document.querySelectorAll('button').forEach(btn => btn.style.display = 'none');
+      const existingTextbooks = JSON.parse(localStorage.getItem('textbooks') || '[]');
+    
+      document.getElementById('content').innerHTML = `
+        <h2>Upload Textbook</h2>
+        <label>Existing Textbooks:</label>
+        <ul>${existingTextbooks.map(book => `<li>${book}</li>`).join('')}</ul>
+    
+        <label>Select Textbook:</label>
+        <div class="file-upload-wrapper">
+          <input type="file" id="file-upload" accept="application/pdf">
+          <label for="file-upload" class="custom-file-upload">Choose File</label>
+          <span id="selected-file">No file selected</span>
+        </div>
+        
+        <button onclick="uploadTextbook()">Upload</button>
+        <button onclick="goBack()">Back</button>
+      `;
+    
+      // Display the file name when selected
+      document.getElementById('file-upload').addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+          document.getElementById('selected-file').textContent = `This textbook is selected: ${file.name}`;
+        }
+      });
+    }
+    
+    function uploadTextbook() {
+      const file = document.getElementById('file-upload').files[0];
+      if (!file) {
+        alert("Please select a textbook to upload!");
+        return;
+      }
+      
+      // Show loading message
+      document.getElementById('content').innerHTML += '<p id="upload-status">Uploading and processing file, please wait...</p>';
+      
+      // Create FormData object to send the file
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      console.log("Attempting to upload file:", file.name);
+      
+      // Send the file to the backend
+      fetch('http://localhost:5000/upload', {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => {
+        console.log("Response status:", response.status);
+        
+        // Check if the response is successful
+        if (!response.ok) {
+          return response.text().then(text => {
+            console.error("Error response:", text);
+            throw new Error(`Upload failed (${response.status}): ${text.substring(0, 100)}...`);
+          });
+        }
+        
+        // Try to parse the response as JSON
+        return response.json();
+      })
+      .then(data => {
+        console.log("Success response:", data);
+        
+        // Update the localStorage with the file name
+        const existingTextbooks = JSON.parse(localStorage.getItem('textbooks') || '[]');
+        existingTextbooks.push(file.name);
+        localStorage.setItem('textbooks', JSON.stringify(existingTextbooks));
+        
+        // Show success message
+        alert(`Uploaded and processed: ${file.name}\n${data.message}`);
+        goBack();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('upload-status').textContent = `Error: ${error.message}`;
+      });
+    }
+    
+    function goBack() {
+      document.getElementById('content').innerHTML = '';
+      document.querySelectorAll('button').forEach(btn => btn.style.display = 'inline-block');
+    }
+    
+    function logout() {
+      sessionStorage.removeItem("isAdminLoggedIn");
+      window.location.href = "admin.html";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>EduQuest</title>
+    <link rel="manifest" href="manifest.json">
+   
+    <link rel="icon" href="ques.png" type="image/png">
+    
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #141e30, #243b55);
+            color: #f4f4f9;
+            display: flex;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        header h1 {
+            font-size: 5rem;
+            color: #ffffff;
+            background: linear-gradient(90deg, #007bff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar {
+            background-color: #1e293b;
+            width: 250px;
+            overflow-y: auto;
+            padding: 1rem;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            color: #f4f4f9;
+        }
+
+        .sidebar h2 {
+            font-size: 1.5rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 1rem;
+            background-color: #243b55;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar ul li:hover {
+            background-color: #00d4ff;
+            color: #000;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+            width: calc(100% - 250px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        main {
+            background: #1e293b;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            margin: 1rem 0;
+            font-size: 16px;
+            border: 2px solid #555;
+            border-radius: 10px;
+            background: #243b55;
+            color: #f4f4f9;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            border-color: #00d4ff;
+            background: #1c2b3a;
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            padding: 15px 20px;
+            margin: 1rem 0;
+            color: #ffffff;
+            background: linear-gradient(90deg, #007bff, #00d4ff);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 16px;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .custom-file-upload:hover {
+            background: linear-gradient(90deg, #00d4ff, #007bff);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.6);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-name {
+            margin-top: 0.5rem;
+            color: #00d4ff;
+        }
+
+        button {
+            display: inline-block;
+            padding: 15px 20px;
+            margin-top: 1rem;
+            font-size: 18px;
+            background: linear-gradient(90deg, #007bff, #00d4ff);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #00d4ff, #007bff);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.6);
+        }
+        button:disabled {
+            background: gray;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        #result {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #1c2b3a;
+            border: 1px solid #00d4ff;
+            border-radius: 10px;
+            color: #f4f4f9;
+            text-align: left;
+        }
+       /* #result h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            font-size: 2rem;
+        }
+        
+        hr {
+            border: 0;
+            height: 1px;
+            background: rgba(0, 212, 255, 0.3);
+            margin: 1.5rem 0;
+        }*/
+        .admin-btn {
+            position: fixed; /* Use fixed to stick it on top even if you scroll */
+            top: 15px;
+            right: 15px;
+            background: #00d4ff;
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            transition: background 0.3s ease;
+            z-index: 1000; /* Make sure it's above everything */
+        }
+        
+        .admin-btn:hover {
+            background: #007bff;
+            color: white;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: #243b55;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+          }
+          
+          li:hover {
+            background-color: #00d4ff;
+            color: #000;
+          }
+        
+          .dots {
+            cursor: pointer;
+            font-size: 20px;
+            color: white;
+          }
+          
+          .dots:hover {
+            background: linear-gradient(90deg, #00d4ff, #007bff);
+          }
+          
+          .dropdown-container {
+            display: inline-block;
+            position: relative;
+          }
+          
+          .dropdown-content {
+            display: none;
+            position: absolute;
+            background: linear-gradient(90deg, #032447, #007bff);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(3, 29, 57, 0.4);
+            min-width: 120px;
+            z-index: 10;
+          }
+          
+          .dropdown-content a {
+            display: block;
+            padding: 10px 14px;
+            font-size: 14px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+          }
+          
+          .dropdown-content a:hover {
+            background: rgba(255, 255, 255, 0.1);
+          }
+          
+          .dropdown-active {
+            display: block;
+          }
+          
+          
+          li {
+            transition: all 0.3s ease-in-out;
+          }
+          
+          
+        
+    </style>
+</head>
+<body>
+    <a href="admin.html" class="admin-btn">Admin Login</a>
+    <div class="sidebar">
+      <h2>Recent Questions</h2>
+      <ul id="recent-questions"></ul>
+    </div>
+    
+    <div class="main-content">
+        <header><h1>EduQuest</h1></header>
+        <main>
+            <label for="question">Type your question:</label>
+            <textarea id="question" placeholder="Enter your question here..."></textarea>
+            <label for="file-upload" class="custom-file-upload">📂 Upload a PDF</label>
+            <input type="file" id="file-upload" accept=".pdf, .jpg, .jpeg, .png">
+            <p id="file-name" class="file-name"></p>
+            <button id="submit-btn" disabled>Get Answer</button>
+            <div id="result" style="display: none;"><h2>Answer:</h2><p id="answer"></p></div>
+        </main>
+    </div>
+    <script>
+        const fileUpload = document.getElementById("file-upload");
+        const fileNameDisplay = document.getElementById("file-name");
+        const submitBtn = document.getElementById("submit-btn");
+        const questionInput = document.getElementById("question");
+        const recentQuestionsList = document.getElementById("recent-questions");
+        const answerElement = document.getElementById("answer");
+        
+        const BACKEND_URL_TEXT = "http://127.0.0.1:5000/query";
+        const BACKEND_URL_FILE = "http://127.0.0.1:5000/query";
+        let storedData = JSON.parse(localStorage.getItem("recentSessions")) || [];
+        let sessionId = localStorage.getItem("sessionId");
+        
+        function createNewSession() {
+            sessionId = Date.now().toString();
+            localStorage.setItem("sessionId", sessionId);
+            storedData.push({ sessionId, date: new Date().toDateString(), questions: [] });
+            localStorage.setItem("recentSessions", JSON.stringify(storedData));
+        }
+        
+        if (!sessionId || !storedData.find(s => s.sessionId === sessionId)) {
+            createNewSession();
+        }
+        
+        function toggleButtonState() {
+            submitBtn.disabled = !(questionInput.value.trim().length > 0 || fileUpload.files.length > 0);
+        }
+        
+        questionInput.addEventListener("input", toggleButtonState);
+        fileUpload.addEventListener("change", function() {
+            fileNameDisplay.textContent = this.files.length > 0 ? `Selected: ${this.files[0].name}` : "";
+            toggleButtonState();
+        });
+        
+    // Add this to your existing JavaScript code in index.html
+// This should replace your existing submitBtn event listener for text questions
+
+submitBtn.addEventListener("click", async function() {
+    const question = questionInput.value.trim();
+    const file = fileUpload.files[0];
+
+    if (!question && !file) {
+        alert("Please enter a question or upload a file.");
+        return;
+    }
+
+    // Show the result area
+    document.getElementById("result").style.display = "block";
+    answerElement.innerHTML = "<p>Starting to process your request...</p>";
+
+    // If a file is uploaded, use the existing endpoint
+    if (file) {
+        // Your existing file upload code here
+        let formData = new FormData();
+        formData.append("file", file);
+        // Rest of your file handling code...
+        
+        try {
+            const response = await fetch(BACKEND_URL_FILE, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            // Rest of your file handling code...
+        } catch (error) {
+            console.error("Connection error:", error);
+            answerElement.innerHTML = `<p>Connection error: ${error.message}</p>`;
+        }
+    } 
+    // For text questions, use the new streaming endpoint
+    else if (question) {
+        let formData = new FormData();
+        formData.append("question", question);
+        
+        // Close any existing EventSource
+        if (window.questionEventSource) {
+            window.questionEventSource.close();
+        }
+        
+        try {
+            // Use fetch for initial request to handle any errors
+            const response = await fetch("http://127.0.0.1:5000/query_stream", {
+                method: "POST",
+                body: formData,
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error("Server error:", response.status, errorText);
+                answerElement.innerHTML = `<p>Server error: ${response.status} - ${errorText}</p>`;
+                return;
+            }
+            
+            // If initial request is successful, establish SSE connection
+            const queryUrl = `http://127.0.0.1:5000/query_stream`;
+            
+            // Create form data with the question
+            let sseFormData = new FormData();
+            sseFormData.append("question", question);
+            
+            // Set up a POST request to the streaming endpoint
+            const eventSource = new EventSource(`http://127.0.0.1:5000/query_stream?question=${encodeURIComponent(question)}`);
+            window.questionEventSource = eventSource;
+            
+            eventSource.onmessage = function(event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    console.log("SSE message received:", data);
+                    
+                    if (data.status === "processing") {
+                        // Update with partial response
+                        answerElement.innerHTML = `<p>${data.partial}</p>`;
+                    } else if (data.status === "success") {
+                        // Final response
+                        displayAnswer([{"question": question, "answer": data.response}]);
+                        
+                        // Save to session
+                        saveToSession(question, data.response);
+                        
+                        // Close the connection
+                        eventSource.close();
+                    } else if (data.status === "error") {
+                        answerElement.innerHTML = `<p>Error: ${data.error}</p>`;
+                        eventSource.close();
+                    }
+                } catch (error) {
+                    console.error("Error handling SSE message:", error);
+                    answerElement.innerHTML = `<p>Error processing response: ${error.message}</p>`;
+                    eventSource.close();
+                }
+            };
+            
+            eventSource.onerror = function(error) {
+                console.error("EventSource error:", error);
+                answerElement.innerHTML = "<p>Connection to server lost. Please try again.</p>";
+                eventSource.close();
+            };
+        } catch (error) {
+            console.error("Connection error:", error);
+            answerElement.innerHTML = `<p>Connection error: ${error.message}</p>`;
+        }
+    }
+});
+
+// Replace the displayAnswer function with this updated version
+function displayAnswer(answer) {
+    // Clear previous content
+    answerElement.innerHTML = "";
+    
+    // Show the result div if it's hidden
+    document.getElementById("result").style.display = "block";
+    
+    try {
+        if (Array.isArray(answer)) {
+            // Handle array of question-answer pairs
+            answer.forEach((item, index) => {
+                if (item && item.question) {
+                    // Create italicized question with number
+                    const questionElem = document.createElement("p");
+                    questionElem.innerHTML = `<em>*${index + 1}. ${item.question}*</em>`;
+                    answerElement.appendChild(questionElem);
+                    
+                    // Format answer to preserve whitespace and ASCII art
+                    const answerElem = document.createElement("pre");
+                    answerElem.style.whiteSpace = "pre-wrap";
+                    answerElem.style.fontFamily = "monospace";
+                    answerElem.style.margin = "0";
+                    answerElem.style.overflowX = "auto";
+                    answerElem.textContent = item.answer || "No answer available";
+                    answerElement.appendChild(answerElem);
+                }
+            });
+        } else if (typeof answer === 'string') {
+            // Handle case when answer is just a string (simple case)
+            const questionText = questionInput.value.trim();
+            if (questionText) {
+                // Create italicized question
+                const questionElem = document.createElement("p");
+                questionElem.innerHTML = `<em>*1. ${questionText}*</em>`;
+                answerElement.appendChild(questionElem);
+            }
+            
+            // Format answer to preserve whitespace and ASCII art
+            const answerElem = document.createElement("pre");
+            answerElem.style.whiteSpace = "pre-wrap";
+            answerElem.style.fontFamily = "monospace";
+            answerElem.style.margin = "0";
+            answerElem.style.overflowX = "auto";
+            answerElem.textContent = answer || "No answer available";
+            answerElement.appendChild(answerElem);
+        } else {
+            // Handle case when answer is a non-array object or other type
+            const questionText = questionInput.value.trim();
+            if (questionText) {
+                // Create italicized question
+                const questionElem = document.createElement("p");
+                questionElem.innerHTML = `<em>*1. ${questionText}*</em>`;
+                answerElement.appendChild(questionElem);
+            }
+            
+            // Format answer to preserve whitespace and ASCII art
+            const answerElem = document.createElement("pre");
+            answerElem.style.whiteSpace = "pre-wrap";
+            answerElem.style.fontFamily = "monospace";
+            answerElem.style.margin = "0";
+            answerElem.style.overflowX = "auto";
+            answerElem.textContent = typeof answer === 'object' ? 
+                JSON.stringify(answer, null, 2) : 
+                String(answer || "No answer available");
+            answerElement.appendChild(answerElem);
+        }
+        
+        // Add some CSS to handle ASCII diagrams better
+        const style = document.createElement('style');
+        style.textContent = `
+            #result pre {
+                background-color: #1c2b3a;
+                padding: 10px;
+                border-radius: 5px;
+                font-family: monospace;
+                white-space: pre-wrap;
+                overflow-x: auto;
+            }
+            #result p {
+                margin-bottom: 8px;
+            }
+        `;
+        document.head.appendChild(style);
+        
+    } catch (displayError) {
+        console.error("Error displaying answer:", displayError);
+        answerElement.innerHTML += `<p>Error displaying answer: ${displayError.message}</p>`;
+    }
+}
+
+function loadRecentQuestions() {
+    recentQuestionsList.innerHTML = '';
+    const today = new Date().toDateString();
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+    const todayList = [];
+    const previous3DaysList = [];
+    const oldList = [];
+
+    storedData.forEach(session => {
+        const sessionDate = new Date(session.date);
+        const formattedDate = sessionDate.toDateString();
+        session.questions.forEach((q, index) => {
+            const li = document.createElement('li');
+            li.textContent = q.question;
+
+            // Properly format the answer for storage
+            const answerToStore = typeof q.answer === 'string' 
+                ? q.answer 
+                : Array.isArray(q.answer) 
+                    ? q.answer 
+                    : JSON.stringify(q.answer);
+
+            // Store both question and answer in the data attribute
+            li.setAttribute('data-answer', JSON.stringify({
+                question: q.question,
+                answer: answerToStore
+            }));
+
+            li.onclick = () => {
+                questionInput.value = q.question;
+                try {
+                    // Get the stored data and parse it
+                    const answerData = JSON.parse(li.getAttribute('data-answer'));
+                    
+                    // Check if the answer is a JSON string that needs to be parsed again
+                    let finalAnswer;
+                    try {
+                        // Try to parse it in case it's a stringified JSON
+                        const parsedAnswer = JSON.parse(answerData.answer);
+                        finalAnswer = parsedAnswer;
+                    } catch (parseError) {
+                        // If parsing fails, it's already in the correct format
+                        finalAnswer = answerData.answer;
+                    }
+                    
+                    // Display the answer
+                    displayAnswer(finalAnswer);
+                } catch (e) {
+                    console.error("Error handling answer data:", e);
+                    answerElement.innerHTML = "<p>Error retrieving answer</p>";
+                }
+                document.getElementById("result").style.display = "block";
+            };
+
+            const dropdown = document.createElement('div');
+            dropdown.classList.add('dropdown-container');
+            dropdown.innerHTML = `
+                <span class="dots" onclick="event.stopPropagation(); toggleDropdown('${session.sessionId}', ${index})">⋮</span>
+                <div id="dropdown-${session.sessionId}-${index}" class="dropdown-content">
+                    <a href="#" onclick="event.stopPropagation(); shareQuestion('${q.question}')">Share</a>
+                    <a href="#" onclick="event.stopPropagation(); deleteQuestion('${session.sessionId}', ${index})">Delete</a>
+                </div>
+            `;
+            li.appendChild(dropdown);
+            if (formattedDate === today) {
+                todayList.push(li);
+            } else if (sessionDate >= threeDaysAgo) {
+                previous3DaysList.push(li);
+            } else {
+                oldList.push(li);
+            }
+        });
+    });
+
+    if (todayList.length) addSection("Today", todayList);
+    if (previous3DaysList.length) addSection("Previous 3 Days", previous3DaysList);
+    if (oldList.length) addSection("Old", oldList);
+}
+
+// Also need to fix the saveToSession function to ensure answer is properly stored
+function saveToSession(question, answer) {
+    try {
+        const currentSession = storedData.find(s => s.sessionId === sessionId);
+        if (currentSession) {
+            // Check if the question already exists in the current session
+            const existingQuestionIndex = currentSession.questions.findIndex(q => q.question === question);
+
+            // Format the answer properly for storage
+            let formattedAnswer = answer;
+            if (Array.isArray(answer) && answer.length > 0) {
+                // If it's an array of responses, keep the structure intact
+                formattedAnswer = answer;
+            } else if (typeof answer === 'object' && answer !== null) {
+                // If it's an object and has a response property, use that
+                if (answer.response) {
+                    formattedAnswer = answer.response;
+                } else if (answer.answer) {
+                    formattedAnswer = answer.answer;
+                }
+                // Otherwise keep the object as is
+            }
+
+            if (existingQuestionIndex === -1) {
+                // If the question doesn't exist, add it as a new entry
+                currentSession.questions.unshift({
+                    question,
+                    answer: formattedAnswer,
+                    timestamp: new Date()
+                });
+            } else {
+                // If the question exists, remove the old entry and add the new one at the beginning
+                const existingQuestion = currentSession.questions.splice(existingQuestionIndex, 1)[0];
+                existingQuestion.answer = formattedAnswer; // Update the answer
+                existingQuestion.timestamp = new Date(); // Update timestamp
+                currentSession.questions.unshift(existingQuestion);
+            }
+
+            // Save to localStorage
+            localStorage.setItem("recentSessions", JSON.stringify(storedData));
+            console.log("Saved to session:", { question, answer: formattedAnswer });
+        }
+    } catch (error) {
+        console.error("Error saving to session:", error);
+    }
+    loadRecentQuestions();
+}
+
+
+        
+        function addSection(title, items) {
+            const section = document.createElement('div');
+            section.innerHTML = `<h3>${title}</h3>`;
+            const ul = document.createElement('ul');
+            items.forEach(item => ul.appendChild(item));
+            section.appendChild(ul);
+            recentQuestionsList.appendChild(section);
+        }
+        
+        function toggleDropdown(sessionId, index) {
+            const dropdown = document.getElementById(`dropdown-${sessionId}-${index}`);
+            dropdown.classList.toggle("dropdown-active");
+        }
+        
+        document.addEventListener("click", (event) => {
+            const dropdowns = document.querySelectorAll(".dropdown-content");
+            dropdowns.forEach(dropdown => {
+                if (!dropdown.parentElement.contains(event.target)) {
+                    dropdown.classList.remove("dropdown-active");
+                }
+            });
+        });
+        
+        function deleteQuestion(sessionId, index) {
+            const session = storedData.find(s => s.sessionId === sessionId);
+            if (session) {
+                session.questions.splice(index, 1);
+                localStorage.setItem("recentSessions", JSON.stringify(storedData));
+                loadRecentQuestions();
+            }
+        }
+        
+        function shareQuestion(text) {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Check this question on EduQuest!',
+                    text: text,
+                }).then(() => console.log('✅ Question shared successfully!'))
+                    .catch(error => console.error('❗ Error sharing question:', error));
+            } else {
+                alert('Sharing not supported on this browser!');
+            }
+        }
+        loadRecentQuestions();
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("serviceworker.js", { scope: "/" })
+                    .then(reg => console.log("Service Worker registered:", reg.scope))
+                    .catch(err => console.log("Service Worker registration failed:", err));
+            });
+        }
+    </script>
+    </body>
+    </html>

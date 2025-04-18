@@ -1,0 +1,97 @@
+<html>
+<head>
+    <title>EduQuest Admin Login</title>
+    <link rel="icon" href="ques.png" type="image/png">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1c1c2b, #3a3a6e);
+            color: #f4f4f9;
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+        .admin-container {
+            background: #1e293b;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #007bff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        input {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin: 0.5rem 0;
+            font-size: 16px;
+            border: 2px solid #555;
+            border-radius: 8px;
+            background: #243b55;
+            color: #f4f4f9;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background: linear-gradient(90deg, #007bff, #00d4ff);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: linear-gradient(90deg, #00d4ff, #007bff);
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h1>Admin Login</h1>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button> 
+        <p>
+        <button onclick="goBack()">Go Back</button>
+
+    </div>
+
+    <script>
+        const ADMIN_USER = "admin";
+        const ADMIN_PASS = "sctceeduquest";
+        function goBack() {
+            window.location.href = "index.html"; // Ensure index.html is in the same directory
+        }
+        
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if (username.trim() === "" || password.trim() === "") {
+                alert("Please enter both username and password.");
+                return;  // Stop the function if fields are empty
+            }
+
+            if (username === ADMIN_USER && password === ADMIN_PASS) {
+                sessionStorage.setItem("isAdminLoggedIn", "true");  // Save session data
+               // alert("Login Successful!");
+                window.location.href = "adm-dash.html"; // Redirect to dashboard (make sure the filename matches your actual dashboard file)
+            
+            } else {
+                alert("Invalid Credentials. Please try again.");
+            }
+        }
+    </script>
+</body>
+</html>
